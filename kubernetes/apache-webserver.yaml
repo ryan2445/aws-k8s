@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apache-server
+  template:
+    metadata:
+      labels:
+        app: apache-server
+    spec:
+      containers:
+        - name: apache-server
+          image: 079958958349.dkr.ecr.us-west-2.amazonaws.com/ryanhoffman:latest
+          ports:
+            - containerPort: 80
