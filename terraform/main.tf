@@ -57,17 +57,27 @@ module "eks" {
   subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
 
-  eks_managed_node_group_defaults = {
-    ami_type = "AL2_ARM_64"
-  }
-
   eks_managed_node_groups = {
     eks-nodes = {
       name           = "eks-nodes"
+      ami_type       = "AL2_ARM_64"
       instance_types = ["t4g.small"]
       min_size       = 1
       max_size       = 1
       desired_size   = 1
+
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = 20
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 150
+            delete_on_termination = true
+          }
+        }
+      }
     }
   }
 }
